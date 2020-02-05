@@ -1,19 +1,28 @@
 import sqlite3
+from student import Student
+from cohort import Cohort
 
 
 class StudentExerciseReports():
 
     """Methods for reports on the Student Exercises database"""
+    # function definition to create a student, 
+    # def create_student(self, cursor, row):
+    #     return Student(row[1], row[2], row[3], row[5])
 
     def __init__(self):
         self.db_path = "/Users/shawnachatfield/workspace/pythonTime/StudentExercises/studentexercises.db"
+
 
     def all_students(self):
 
         """Retrieve all students with the cohort name"""
 
         with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Student(
+            row[1], row[2], row[3], row[5])               
             db_cursor = conn.cursor()
+           
 
             db_cursor.execute("""
             select s.id,
@@ -32,8 +41,15 @@ class StudentExerciseReports():
             # Extracting Individual Columns
             # Since a tuple is simply an immutable list, you can use square-bracket notation to extract individual items out of it. Displaying a tuple to the terminal as output is not good UX. Use the following code to just display the first name (second column), last name (third column), and cohort name (sixth column).
             # this loop is extracting individual columns to display first name [1], last name [2], and cohort name [3]
+            # for student in all_students:
+            #     print(f'{student[1]} {student[2]} is in {student[5]}')
+
+#             for student in all_students:
+#                 print(f'{student.first_name} {student.last_name} is in {student.cohort}')
+            # this replaces the for loop we originally had above
+
             for student in all_students:
-                print(f'{student[1]} {student[2]} is in {student[5]}')
+                 print(student)
 
 reports = StudentExerciseReports()
 reports.all_students()
