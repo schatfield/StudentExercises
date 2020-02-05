@@ -8,3 +8,5 @@ class Exercise:
         self.exercise_name = exercise_name
         self.exercise_language = exercise_language
         
+    def __repr__(self):
+        return f'{self.exercise_name}'

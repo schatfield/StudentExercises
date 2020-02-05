@@ -1,6 +1,7 @@
 import sqlite3
 from student import Student
 from cohort import Cohort
+from exercise import Exercise
 
 
 class StudentExerciseReports():
@@ -50,6 +51,12 @@ class StudentExerciseReports():
                  print(student)
           # this replaces the for loop we originally had above
 
+
+     # function definition to create a student, 
+    # def create_cohort(self, cursor, row):
+    #     return Cohort(row[1])
+
+
     def all_cohorts(self):
 
         """Retrieve all cohorts"""
@@ -70,9 +77,30 @@ class StudentExerciseReports():
             for cohort in all_cohorts:
                 print(cohort)
 
+
+    def all_exercises(self):
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+                """)
+
+            all_exercises = db_cursor.fetchall()
+
+            for exercise in all_exercises:
+                print(exercise)
+
+
 reports = StudentExerciseReports()
 reports.all_students()
 reports.all_cohorts()
+reports.all_exercises()
 
 
 # if __name__ == "__main__":
