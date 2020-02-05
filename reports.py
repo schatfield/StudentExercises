@@ -52,7 +52,7 @@ class StudentExerciseReports():
           # this replaces the for loop we originally had above
 
 
-     # function definition to create a student, 
+     # function definition to create a cohort, 
     # def create_cohort(self, cursor, row):
     #     return Cohort(row[1])
 
@@ -77,8 +77,13 @@ class StudentExerciseReports():
             for cohort in all_cohorts:
                 print(cohort)
 
+    # function definition to create an exercise 
+    # def create_exercise(self, cursor, row):
+    #     return Exercise(row[1], row[2])
 
     def all_exercises(self):
+
+        """Retrieve all exercises"""
 
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
@@ -96,11 +101,55 @@ class StudentExerciseReports():
             for exercise in all_exercises:
                 print(exercise)
 
+    def js_exercises(self):
+
+        """Retrieve all Javascript exercises"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+            Where e.exercise_language = "Javascript"
+                """)
+
+            js_exercises = db_cursor.fetchall()
+
+            for exercise in js_exercises:
+                print(exercise)
+
+    def py_exercises(self):
+
+        """Retrieve all Python exercises"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+            Where e.exercise_language = "Python"
+                """)
+
+            py_exercises = db_cursor.fetchall()
+
+            for exercise in py_exercises:
+                print(exercise)
+
 
 reports = StudentExerciseReports()
 reports.all_students()
 reports.all_cohorts()
 reports.all_exercises()
+reports.js_exercises()
+reports.py_exercises()
 
 
 # if __name__ == "__main__":
