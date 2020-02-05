@@ -1,6 +1,7 @@
 import sqlite3
 from student import Student
 from cohort import Cohort
+from exercise import Exercise
 
 
 class StudentExerciseReports():
@@ -22,7 +23,6 @@ class StudentExerciseReports():
             conn.row_factory = lambda cursor, row: Student(
             row[1], row[2], row[3], row[5])               
             db_cursor = conn.cursor()
-           
 
             db_cursor.execute("""
             select s.id,
@@ -39,20 +39,117 @@ class StudentExerciseReports():
             all_students = db_cursor.fetchall()
 
             # Extracting Individual Columns
-            # Since a tuple is simply an immutable list, you can use square-bracket notation to extract individual items out of it. Displaying a tuple to the terminal as output is not good UX. Use the following code to just display the first name (second column), last name (third column), and cohort name (sixth column).
             # this loop is extracting individual columns to display first name [1], last name [2], and cohort name [3]
             # for student in all_students:
             #     print(f'{student[1]} {student[2]} is in {student[5]}')
 
-#             for student in all_students:
-#                 print(f'{student.first_name} {student.last_name} is in {student.cohort}')
-            # this replaces the for loop we originally had above
+            # for student in all_students:
+            #     print(f'{student.first_name} {student.last_name} is in {student.cohort}')
+           
 
             for student in all_students:
                  print(student)
+          # this replaces the for loop we originally had above
+
+
+     # function definition to create a cohort, 
+    # def create_cohort(self, cursor, row):
+    #     return Cohort(row[1])
+
+
+    def all_cohorts(self):
+
+        """Retrieve all cohorts"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory =lambda cursor, row: Cohort(
+                row[1])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select c.cohort_id,
+                c.cohort_name
+            from Cohort c
+                """)
+
+            all_cohorts = db_cursor.fetchall()
+
+            for cohort in all_cohorts:
+                print(cohort)
+
+    # function definition to create an exercise 
+    # def create_exercise(self, cursor, row):
+    #     return Exercise(row[1], row[2])
+
+    def all_exercises(self):
+
+        """Retrieve all exercises"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+                """)
+
+            all_exercises = db_cursor.fetchall()
+
+            for exercise in all_exercises:
+                print(exercise)
+
+    def js_exercises(self):
+
+        """Retrieve all Javascript exercises"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+            Where e.exercise_language = "Javascript"
+                """)
+
+            js_exercises = db_cursor.fetchall()
+
+            for exercise in js_exercises:
+                print(exercise)
+
+    def py_exercises(self):
+
+        """Retrieve all Python exercises"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = lambda cursor, row: Exercise(row[1], row[2])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select e.id,
+                e.exercise_name,
+                e.exercise_language
+            from Exercise e
+            Where e.exercise_language = "Python"
+                """)
+
+            py_exercises = db_cursor.fetchall()
+
+            for exercise in py_exercises:
+                print(exercise)
+
 
 reports = StudentExerciseReports()
 reports.all_students()
+reports.all_cohorts()
+reports.all_exercises()
+reports.js_exercises()
+reports.py_exercises()
 
 
 # if __name__ == "__main__":
