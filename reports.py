@@ -22,7 +22,6 @@ class StudentExerciseReports():
             conn.row_factory = lambda cursor, row: Student(
             row[1], row[2], row[3], row[5])               
             db_cursor = conn.cursor()
-           
 
             db_cursor.execute("""
             select s.id,
@@ -39,20 +38,41 @@ class StudentExerciseReports():
             all_students = db_cursor.fetchall()
 
             # Extracting Individual Columns
-            # Since a tuple is simply an immutable list, you can use square-bracket notation to extract individual items out of it. Displaying a tuple to the terminal as output is not good UX. Use the following code to just display the first name (second column), last name (third column), and cohort name (sixth column).
             # this loop is extracting individual columns to display first name [1], last name [2], and cohort name [3]
             # for student in all_students:
             #     print(f'{student[1]} {student[2]} is in {student[5]}')
 
-#             for student in all_students:
-#                 print(f'{student.first_name} {student.last_name} is in {student.cohort}')
-            # this replaces the for loop we originally had above
+            # for student in all_students:
+            #     print(f'{student.first_name} {student.last_name} is in {student.cohort}')
+           
 
             for student in all_students:
                  print(student)
+          # this replaces the for loop we originally had above
+
+    def all_cohorts(self):
+
+        """Retrieve all cohorts"""
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory =lambda cursor, row: Cohort(
+                row[1])
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            select c.cohort_id,
+                c.cohort_name
+            from Cohort c
+                """)
+
+            all_cohorts = db_cursor.fetchall()
+
+            for cohort in all_cohorts:
+                print(cohort)
 
 reports = StudentExerciseReports()
 reports.all_students()
+reports.all_cohorts()
 
 
 # if __name__ == "__main__":

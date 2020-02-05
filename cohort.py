@@ -14,3 +14,5 @@ class Cohort:
 
 
 
+    def __repr__(self):
+        return f'{self.cohort_name}'
